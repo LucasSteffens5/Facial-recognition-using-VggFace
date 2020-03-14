@@ -4,6 +4,7 @@ Facial recognition using the VggFace descriptor, together with the Ultra-Light f
 
 # Hardware Used
 CPU: Intel Core i7 7700-HQ
+
 GPU: Nvidia GTX 1050Ti
 
 # References
