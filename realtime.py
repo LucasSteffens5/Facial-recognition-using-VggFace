@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Author: fyr91
-# @Date:   2019-10-22 15:05:15
-# @Last Modified by:   fyr91
-# @Last Modified time: 2019-10-30 11:25:26
+
 import cv2
 import numpy as np
 import onnx
@@ -14,18 +11,16 @@ from scipy.spatial.distance import cosine
 from keras.preprocessing import image
 from keras_vggface.vggface import VGGFace
 
-
+#Carrega o modelo
 model = VGGFace(model='resnet50', include_top=False, input_shape=(224, 224, 3), pooling=None)# Pode se usar a senet50
-	#Faz a predição nas amostras
+	
 
 
 
 from keras_vggface.utils import preprocess_input
-def is_match(known_embedding, candidate_embedding, thresh=0.5):
-	#Calcula a distancia do cosseno entre os vetores de caracteristica
-    
-    
-	return cosine(known_embedding, candidate_embedding)
+def EhUmMatch(known_embedding, candidate_embedding, thresh=0.5):
+	#Calcula a distancia do cosseno entre os vetores de caracteristica  
+    	return cosine(known_embedding, candidate_embedding)
 
 i=0
 
@@ -41,7 +36,7 @@ def procurapessoa(pessoa,descritor,vetorpredict):
     minimo=[]
     
     while( i< len(descritor)-1):
-        cos = is_match(descritor[i],vetorpredict)
+        cos = EhUmMatch(descritor[i],vetorpredict)
         minimo.append(cos)
         
         i+=1
@@ -57,7 +52,7 @@ def procurapessoa(pessoa,descritor,vetorpredict):
 
 
 
-
+#Código adpatado das referências 
 def area_of(left_top, right_bottom):
     """
     Compute the areas of rectangles given two corners.
@@ -164,20 +159,22 @@ def predict(width, height, confidences, boxes, prob_threshold, iou_threshold=0.5
     return picked_box_probs[:, :4].astype(np.int32), np.array(picked_labels), picked_box_probs[:, 4]
 
 video_capture = cv2.VideoCapture(0)
-
-onnx_path = 'C:\\Users\\lucas\\Desktop\\Materias20192\\visaocomputacional\\Comparacaovggs\\ProjetoVisao\\ultra_light_640.onnx'
+#Carrega o modelo de detecção de rostos
+onnx_path = 'D:\\SeuCaminho\\ultra_light_640.onnx'
 onnx_model = onnx.load(onnx_path)
 predictor = prepare(onnx_model)
 ort_session = ort.InferenceSession(onnx_path)
 input_name = ort_session.get_inputs()[0].name
 j=0
+
+
 while True:
     ret, frame = video_capture.read()
     if frame is not None:
         h, w, _ = frame.shape
 
-        # preprocess img acquired
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # convert bgr to rgb
+        # Processa a imagem adquirida
+        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # converte bgr para rgb
         #out=Image.fromarray(img,mode="RGB")
         #out.show()
         img = cv2.resize(img, (640, 480)) # resize
@@ -194,11 +191,11 @@ while True:
             box = boxes[i, :]
             x1, y1, x2, y2 = box
             cv2.rectangle(frame, (x1-3, y1-3), (x2+3, y2+3), (80,18,236), 2)
-            imagee =  cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # convert bgr to rgb
+            imagee =  cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)# converte bgr para rgb
             imagee = Image.fromarray(imagee,mode="RGB")
             imagee = imagee.crop((x1, y1, x2, y2))
             imagee= imagee.resize((224,224))
-            # Prever VGG
+            # Prever VGGFace
             x = image.img_to_array(imagee)
             x = np.expand_dims(x, axis=0)
             x = preprocess_input(x)
@@ -207,8 +204,8 @@ while True:
             x = x.flatten()
             x = procurapessoa(pessoa,descritor,x)
                     
-            
-            imagee.save("C:\\Users\\lucas\\Desktop\\Materias20192\\visaocomputacional\\Comparacaovggs\\ProjetoVisao\\cortadasdetector\\img"+str(j)+".jpg")
+            #Salva as capturas dos rostos, util para pegar novos rostos e cadastrar na base
+            #imagee.save("D:\\SeuCaminho\\img"+str(j)+".jpg")
             j+=1
             cv2.rectangle(frame, (x1, y2 - 20), (x2, y2), (80,18,236), cv2.FILLED)
             font = cv2.FONT_HERSHEY_DUPLEX
@@ -216,10 +213,10 @@ while True:
             cv2.putText(frame, text, (x1 + 6, y2 - 6), font, 0.5, (255, 255, 255), 1)
 
         cv2.imshow('Video', frame)
-        # Hit 'q' on the keyboard to quit!
+        # Pressione q para sair
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# Release handle to the webcam
+#Inicializa a WebCam
 video_capture.release()
 cv2.destroyAllWindows()

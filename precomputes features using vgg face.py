@@ -5,34 +5,18 @@ Created on Mon Feb 24 15:26:18 2020
 @author: lucas
 """
 import pandas as pd
-from PIL import Image
-from numpy import asarray
-from scipy.spatial.distance import cosine, euclidean
-from mtcnn.mtcnn import MTCNN
+from scipy.spatial.distance import cosine
 from keras_vggface.vggface import VGGFace
 from keras_vggface.utils import preprocess_input
 import os
-import matplotlib.pyplot as plt
-import sklearn.metrics as metrics
-from glob import glob
 import numpy as np
-from sklearn.metrics import roc_curve
-from sklearn.metrics import auc
-import pathlib
-from sklearn.cluster import KMeans
-import cv2
-import glob
-from glob import glob
-import feather
-import pathlib
-
 from keras.preprocessing import image
 
 
 model = VGGFace(model='resnet50', include_top=False, input_shape=(224, 224, 3), pooling=None)# Pode se usar a senet50
 	#Faz a predição nas amostras
 
-def files_path04(path):  # Percorre todo diretorio e pega o nome dos arquivos
+def ProcuraArquivos(path):  # Percorre todo diretorio e pega o nome dos arquivos
     filenames=[]
     for p, _, files in os.walk(os.path.abspath(path)):
         for file in files:
@@ -41,7 +25,7 @@ def files_path04(path):  # Percorre todo diretorio e pega o nome dos arquivos
 
 
 
-def extract_vector(path):
+def GeradorDeVetoresDeCaracteristica(path):
     resnet_feature_list = []
 
     for im in path:
@@ -60,20 +44,15 @@ def extract_vector(path):
 
 
 
-
-
-
-
-
 # Verifica se a distancia da entrada com a amostra 
-def is_match(known_embedding, candidate_embedding, thresh=0.5):
+def EhUmMatch(known_embedding, candidate_embedding, thresh=0.5):
 	#Calcula a distancia do cosseno entre os vetores de caracteristica
     
     
 	return cosine(known_embedding, candidate_embedding)
 
 
-def extract_means_vector(path):
+def ExtraiMediaDosVetoresDeCaracteristica(path):
     resnet_feature_list = []
     
     for im in path:
@@ -102,14 +81,14 @@ def extract_means_vector(path):
 
 
 famosos=[]
-
-lista = os.listdir('C:\\Users\\lucas\\Desktop\\Materias20192\\visaocomputacional\\Comparacaovggs\\lfw_cropp\\')
+diretorioFaces='D:\\SeuCaminho\\lwf\\'
+lista = os.listdir(diretorioFaces)
 
 
 for nomefamoso in lista:
-    caminho = 'C:\\Users\\lucas\\Desktop\\Materias20192\\visaocomputacional\\Comparacaovggs\\lfw_cropp\\'+nomefamoso
-    path = files_path04(caminho)
-    Output = extract_means_vector(path)
+    caminho = diretorioFaces + nomefamoso
+    path = ProcuraArquivos(caminho)
+    Output = ExtraiMediaDosVetoresDeCaracteristica(path)
     Output = Output.T
     
     famosos.append([nomefamoso, Output])
