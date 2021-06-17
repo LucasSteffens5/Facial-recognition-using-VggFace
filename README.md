@@ -11,6 +11,26 @@ Reconhecimento facial usando o descritor VggFace, juntamente com o extrator de r
 
 A base de dados utilizada para teste foi <a href="http://vis-www.cs.umass.edu/lfw/">Labeled Faces in the Wild</a>
 
+
+O diretório da base deve estar estruturado da seguinte forma:
+
+```
+---- BaseDeDados
+          |
+          ------- lwf
+                    |
+                     -------- nome1
+                    |
+                     -------- nome2
+                    |
+                     -------- nome3
+                    |
+                     -------- ...
+                    |
+                     -------- nome N
+         
+  ```  
+
 * O arquivo move_files.py foi usado para mover as fotos de um diretório para outro conforme eram realizados testes.
 * O arquivo precomputes features using vgg face.py é usado para percorrer a base de dados com todas as faces  e gerar os vetores de caracteristicas com a vggface, após é gerado e  salvo um vetor média (com bases muito grandes isto terá de ser revisto) dos descritores de cada face juntamente com o nome da face da base e salvo em um .pkl.
 
