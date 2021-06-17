@@ -1,6 +1,12 @@
 # Reconhecimento facial usando o descritor VggFace
 Resgatando uma das atividades realizadas durante a graduação (não espere padrão de projetos)
 
+
+![](reconhecimentogif.gif)
+
+
+
+
 Reconhecimento facial usando o descritor VggFace, juntamente com o extrator de rosto Ultra-Light. A origem de ambos pode ser encontrada nas referências, no entanto, foram feitas modificações no código do extrator de face e um algoritmo foi criado através da saída do descritor de face.
 
 A base de dados utilizada para teste foi <a href="http://vis-www.cs.umass.edu/lfw/">Labeled Faces in the Wild</a>
@@ -21,12 +27,12 @@ conda env create -f reconhecimentoFacialVGGFace.yml
 Para maiores informações dos códigos aproveitados verifique as referências.
 
 
-# Hardware Used
+# Hardware Usado
 CPU: Intel Core i7 7700-HQ
 
 GPU: Nvidia GTX 1050Ti
 
-# References
+# Referências
 * [VGG Face Descriptor](http://www.robots.ox.ac.uk/~vgg/software/vgg_face/)
 
 * [Real time face recognition with CPU](https://towardsdatascience.com/real-time-face-recognition-with-cpu-983d35cc3ec5)
