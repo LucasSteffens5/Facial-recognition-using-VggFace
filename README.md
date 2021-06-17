@@ -33,7 +33,7 @@ O diretório da base deve estar estruturado da seguinte forma:
             No diretório o arquivo estruturabase.zip é um exemplo da estrutura
   ```  
 
-* O arquivo move_files.py foi usado para mover as fotos de um diretório para outro conforme eram realizados testes.
+
 * O arquivo precomputes features using vgg face.py é usado para percorrer a base de dados com todas as faces  e gerar os vetores de caracteristicas com a vggface, após é gerado e  salvo um vetor média (com bases muito grandes isto terá de ser revisto) dos descritores de cada face juntamente com o nome da face da base e salvo em um .pkl.
 * O arquivo realtime.py carrega o .pkl e usa o extrator de faces citado na referência para extrair a face em tempo real, pela webcam, onde esta extração passa pela vggface e o vetor gerado é classificado pelo vetor com a menor distãncia disponivel no .pkl caso essa distãncia obedeça um limiar minimo.
 
